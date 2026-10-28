@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export const QuickLinks: React.FC = () => {
-  const { config } = useApp();
+  const { config, showToast } = useApp();
 
   return (
     <div className="grid grid-cols-3 gap-2 mt-[14px]">
@@ -43,22 +43,40 @@ export const QuickLinks: React.FC = () => {
         </span>
       </a>
 
-      <a
-        href={config.youtubeChannel}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 p-[10px_8px] rounded-[16px] bg-white text-[#0f172a] border border-[#e1e8f5] shadow-[0_2px_8px_rgba(20,40,90,0.05)] hover:border-[#93c5fd] hover:shadow-[0_6px_16px_-8px_rgba(37,99,235,0.5)] active:scale-97 transition-all text-center"
-      >
-        <span className="w-7 h-7 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white grid place-items-center shrink-0">
-          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-            <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
-          </svg>
-        </span>
-        <span className="flex flex-col text-left leading-tight">
-          <small className="hidden md:inline text-[11px] text-[#666b85]">Channel</small>
-          <b className="text-[12.5px] font-semibold whitespace-nowrap">YouTube</b>
-        </span>
-      </a>
+      {config.youtubeChannel ? (
+        <a
+          href={config.youtubeChannel}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 p-[10px_8px] rounded-[16px] bg-white text-[#0f172a] border border-[#e1e8f5] shadow-[0_2px_8px_rgba(20,40,90,0.05)] hover:border-[#93c5fd] hover:shadow-[0_6px_16px_-8px_rgba(37,99,235,0.5)] active:scale-97 transition-all text-center"
+        >
+          <span className="w-7 h-7 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white grid place-items-center shrink-0">
+            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
+            </svg>
+          </span>
+          <span className="flex flex-col text-left leading-tight">
+            <small className="hidden md:inline text-[11px] text-[#666b85]">Channel</small>
+            <b className="text-[12.5px] font-semibold whitespace-nowrap">YouTube</b>
+          </span>
+        </a>
+      ) : (
+        <button
+          type="button"
+          onClick={() => showToast('ইউটিউব চ্যানেল শীঘ্রই আসছে')}
+          className="flex items-center justify-center gap-2 p-[10px_8px] rounded-[16px] bg-white text-[#0f172a] border border-[#e1e8f5] shadow-[0_2px_8px_rgba(20,40,90,0.05)] hover:border-[#93c5fd] active:scale-97 transition-all text-center cursor-pointer"
+        >
+          <span className="w-7 h-7 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white grid place-items-center shrink-0">
+            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
+            </svg>
+          </span>
+          <span className="flex flex-col text-left leading-tight">
+            <small className="hidden md:inline text-[11px] text-[#666b85]">Channel</small>
+            <b className="text-[12.5px] font-semibold whitespace-nowrap">YouTube</b>
+          </span>
+        </button>
+      )}
     </div>
   );
 };

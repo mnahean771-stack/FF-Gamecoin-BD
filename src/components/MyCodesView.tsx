@@ -1,21 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export const MyCodesView: React.FC = () => {
-  const { codes, openDrawer, navigateTo, redeemCode, showToast } = useApp();
-  const [showRedeemModal, setShowRedeemModal] = useState(false);
-  const [inputCode, setInputCode] = useState('');
+  const { codes, openDrawer, navigateTo, showToast } = useApp();
 
-  const handleRedeem = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputCode.trim()) {
-      showToast('কোড লিখুন');
-      return;
-    }
-    redeemCode(inputCode);
-    setInputCode('');
-    setShowRedeemModal(false);
-  };
+  const GARENA_REDEEM_URL = 'https://reward.ff.garena.com/';
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -37,17 +26,18 @@ export const MyCodesView: React.FC = () => {
           </svg>
         </button>
         <h1 className="text-[26px] font-extrabold tracking-tight text-[#0f172a] flex-1 min-w-0">My Codes</h1>
-        <button
-          type="button"
-          onClick={() => setShowRedeemModal(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white font-bold text-[14px] cursor-pointer shadow-[0_10px_22px_-10px_rgba(37,99,235,0.85)] active:scale-95 transition-all shrink-0"
+        <a
+          href={GARENA_REDEEM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white font-bold text-[14px] cursor-pointer shadow-[0_10px_22px_-10px_rgba(37,99,235,0.85)] hover:brightness-105 active:scale-95 transition-all shrink-0"
         >
           <svg className="w-4 h-4 fill-none stroke-current stroke-[2.2]" viewBox="0 0 24 24">
             <path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5" />
             <path d="M15 3h6v6M10 14L21 3" />
           </svg>
           Redeem Code
-        </button>
+        </a>
       </div>
 
       {codes.length === 0 ? (
@@ -85,37 +75,6 @@ export const MyCodesView: React.FC = () => {
               </button>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Redeem Modal */}
-      {showRedeemModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a1637]/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-sm rounded-[24px] p-6 shadow-2xl relative">
-            <button
-              onClick={() => setShowRedeemModal(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#f1f5fd] text-[#2563eb] grid place-items-center cursor-pointer"
-            >
-              ✕
-            </button>
-            <h3 className="text-[18px] font-extrabold text-[#0f172a] mb-2">Redeem Code</h3>
-            <p className="text-[13px] text-[#666b85] mb-4">আপনার রিডিম বা গিফট ভাউচার কোডটি এখানে দিন।</p>
-            <form onSubmit={handleRedeem}>
-              <input
-                type="text"
-                placeholder="XXXX-XXXX-XXXX"
-                value={inputCode}
-                onChange={(e) => setInputCode(e.target.value)}
-                className="w-full h-[46px] px-3.5 rounded-[12px] border-[1.5px] border-[#bcd0fb] text-[15px] outline-none focus:border-[#2563eb] uppercase mb-4"
-              />
-              <button
-                type="submit"
-                className="w-full h-[44px] rounded-[12px] bg-linear-to-r from-blue-500 to-blue-700 text-white font-bold text-[15px] cursor-pointer shadow-md"
-              >
-                ভেরিফাই করুন
-              </button>
-            </form>
-          </div>
         </div>
       )}
     </div>

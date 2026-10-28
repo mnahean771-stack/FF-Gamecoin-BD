@@ -16,6 +16,8 @@ export interface ProductCategory {
   rules: string[];
 }
 
+export type DashboardTab = 'orders' | 'wallet' | 'referrals' | 'profile';
+
 export interface User {
   id: string;
   name: string;
@@ -26,6 +28,9 @@ export interface User {
   supportPin: string;
   verified: boolean;
   loggedIn: boolean;
+  referralCode?: string;
+  referralEarnings?: number;
+  totalReferrals?: number;
 }
 
 export interface Order {

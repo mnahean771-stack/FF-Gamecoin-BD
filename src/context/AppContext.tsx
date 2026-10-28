@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, Order, RedeemCode, SiteConfig } from '../types';
+import { User, Order, RedeemCode, SiteConfig, DashboardTab } from '../types';
 import { DEFAULT_CONFIG } from '../config/siteConfig';
 
-export type AppView = 'home' | 'product' | 'my-orders' | 'my-codes' | 'account' | 'add-money';
+export type AppView = 'home' | 'product' | 'dashboard' | 'my-orders' | 'my-codes' | 'account' | 'add-money';
 
 interface AppContextType {
   view: AppView;
@@ -11,13 +11,15 @@ interface AppContextType {
   user: User;
   orders: Order[];
   codes: RedeemCode[];
+  dashboardTab: DashboardTab;
   toastMessage: string | null;
   isAuthOpen: boolean;
   authMode: 'login' | 'register';
   isNotificationOpen: boolean;
   isDrawerOpen: boolean;
   isFabOpen: boolean;
-  navigateTo: (view: AppView, productId?: string) => void;
+  setDashboardTab: (tab: DashboardTab) => void;
+  navigateTo: (view: AppView, productId?: string, tab?: DashboardTab) => void;
   showToast: (msg: string) => void;
   openAuth: (mode?: 'login' | 'register') => void;
   closeAuth: () => void;
@@ -38,18 +40,23 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const DEFAULT_USER: User = {
-  id: 'guest',
-  name: 'Guest',
-  email: '',
-  phone: '',
+  id: 'usr_nahean',
+  name: 'Md Nahean',
+  email: 'mnahean771@gmail.com',
+  phone: '01800000000',
+  avatar: '/avatar.svg',
   balance: 0,
-  supportPin: '2587919',
-  verified: false,
-  loggedIn: false,
+  supportPin: '5849',
+  verified: true,
+  loggedIn: true,
+  referralCode: 'NAHEAN771',
+  referralEarnings: 0,
+  totalReferrals: 0,
 };
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [view, setView] = useState<AppView>('home');
+  const [dashboardTab, setDashboardTab] = useState<DashboardTab>('wallet');
   const [selectedProductId, setSelectedProductId] = useState<string>('ff-likes');
   const [config] = useState<SiteConfig>(DEFAULT_CONFIG);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -64,26 +71,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     try {
       const saved = localStorage.getItem('ff_react_user');
       if (saved) return JSON.parse(saved);
-      const isLogged = localStorage.getItem('ff_logged') === '1';
-      if (isLogged) {
-        return {
-          ...DEFAULT_USER,
-          id: 'user_1',
-          name: 'MD EACIN 69',
-          email: 'eacin69x@gmail.com',
-          phone: '01712345678',
-          balance: 250,
-          verified: true,
-          loggedIn: true
-        };
-      }
     } catch {
       // fallback
     }
     return DEFAULT_USER;
   });
 
-  // Orders persistence
+  // Orders persistence - default to empty to match screenshot
   const [orders, setOrders] = useState<Order[]>(() => {
     try {
       const saved = localStorage.getItem('ff_react_orders');
@@ -91,19 +85,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     } catch {
       // fallback
     }
-    return [
-      {
-        id: '2326868',
-        status: 'Completed',
-        date: '24-09-2026 05:55:50 PM',
-        updated: '24-09-2026 05:57:26 PM',
-        package: 'MONTHLY',
-        price: 790,
-        playerId: '3183118387',
-        paymentMethod: 'Instant Pay',
-        productName: 'UID Topup (BD)'
-      }
-    ];
+    return [];
   });
 
   // Codes persistence
@@ -146,24 +128,45 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [codes]);
 
-  // Handle URL hash sync
+  // Handle URL hash / search sync
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
+      const search = new URLSearchParams(window.location.search);
+      const tabParam = search.get('tab') as DashboardTab | null;
+
       if (!hash) {
+        if (tabParam && ['orders', 'wallet', 'referrals', 'profile'].includes(tabParam)) {
+          setDashboardTab(tabParam);
+          setView('dashboard');
+          return;
+        }
         setView('home');
         return;
       }
-      if (hash === 'my-orders') {
-        setView('my-orders');
+
+      if (hash === 'dashboard' || hash.startsWith('dashboard')) {
+        if (tabParam && ['orders', 'wallet', 'referrals', 'profile'].includes(tabParam)) {
+          setDashboardTab(tabParam);
+        }
+        setView('dashboard');
+      } else if (hash === 'my-orders' || hash === 'orders') {
+        setDashboardTab('orders');
+        setView('dashboard');
+      } else if (hash === 'wallet') {
+        setDashboardTab('wallet');
+        setView('dashboard');
+      } else if (hash === 'referrals') {
+        setDashboardTab('referrals');
+        setView('dashboard');
+      } else if (hash === 'account' || hash === 'profile') {
+        setDashboardTab('profile');
+        setView('dashboard');
       } else if (hash === 'my-codes') {
         setView('my-codes');
-      } else if (hash === 'account') {
-        setView('account');
       } else if (hash === 'add-money') {
         setView('add-money');
       } else {
-        // Product hashes: ff-likes, uid-topup, weekly-monthly, weekly-lite, level-up-pass, indonesia-server
         setSelectedProductId(hash);
         setView('product');
       }
@@ -181,12 +184,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }, 2800);
   };
 
-  const navigateTo = (newView: AppView, productId?: string) => {
+  const navigateTo = (newView: AppView, productId?: string, tab?: DashboardTab) => {
     setIsDrawerOpen(false);
     setIsFabOpen(false);
+    if (tab) {
+      setDashboardTab(tab);
+    }
     if (newView === 'home') {
       window.location.hash = '';
       setView('home');
+    } else if (newView === 'dashboard') {
+      const activeTab = tab || dashboardTab;
+      window.location.hash = `dashboard?tab=${activeTab}`;
+      setView('dashboard');
+    } else if (newView === 'my-orders') {
+      setDashboardTab('orders');
+      window.location.hash = 'dashboard?tab=orders';
+      setView('dashboard');
+    } else if (newView === 'account') {
+      setDashboardTab('profile');
+      window.location.hash = 'dashboard?tab=profile';
+      setView('dashboard');
     } else if (newView === 'product') {
       const id = productId || selectedProductId;
       setSelectedProductId(id);
@@ -335,12 +353,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         user,
         orders,
         codes,
+        dashboardTab,
         toastMessage,
         isAuthOpen,
         authMode,
         isNotificationOpen,
         isDrawerOpen,
         isFabOpen,
+        setDashboardTab,
         navigateTo,
         showToast,
         openAuth,

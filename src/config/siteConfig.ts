@@ -2,9 +2,9 @@ import { ProductCategory, SiteConfig } from '../types';
 
 export const DEFAULT_CONFIG: SiteConfig = {
   websiteName: 'FF Gamecoin',
-  telegramChannel: 'https://t.me/',
-  telegramGroup: 'https://t.me/',
-  youtubeChannel: 'https://youtube.com/',
+  telegramChannel: 'https://t.me/ffgamecoin',
+  telegramGroup: 'https://t.me/FF_Gamecoin',
+  youtubeChannel: '',
   notificationText: `সবথেকে কম দামে টপ করার জন্য সেরা ওয়েবসাইট
 ১০০% বিশ্বস্ত ও দ্রুত ডেলিভারিতে
 অর্ডার করুন নিশ্চিন্তে ♥️`,
@@ -23,11 +23,25 @@ export const STANDARD_RULES = [
   'যেকোনো সমস্যায় অর্ডারের স্ক্রিনশট সহ টেলিগ্রামে যোগাযোগ করুন।'
 ];
 
+export const ROBLOX_RULES = [
+  'সঠিক Roblox ইউজারনেম দিয়ে অর্ডার করুন।',
+  'কোনো প্রকার পাসওয়ার্ড দেওয়ার প্রয়োজন নেই।',
+  'অর্ডার সাবমিট করার পর দ্রুততম সময়ে Robux আপনার অ্যাকাউন্টে জমা হবে।',
+  'যেকোনো সমস্যায় অর্ডারের স্ক্রিনশট সহ টেলিগ্রামে যোগাযোগ করুন।'
+];
+
+export const COC_RULES = [
+  'Clash of Clans এর সঠিক প্লেয়ার ট্যাগ (যেমন: #9V8Y2UQQP) দিয়ে অর্ডার করুন।',
+  'কোনো লগইন ডিটেইলস বা পাসওয়ার্ড প্রয়োজন নেই।',
+  'দ্রুততম সময়ে Gems বা Gold Pass ডেলিভারি দেওয়া হয়।',
+  'যেকোনো সমস্যায় অর্ডারের স্ক্রিনশট সহ টেলিগ্রামে যোগাযোগ করুন।'
+];
+
 export const PRODUCTS: ProductCategory[] = [
   {
     id: 'ff-likes',
     name: 'FF Likes',
-    image: '/FF LIKES.jpg',
+    image: '/assets/aistudio/FF_LIKES_dfce7554.jpg',
     badge: '২ সেকেন্ডে টপআপ',
     inputLabel: 'প্লেয়ার আইডি বসান',
     inputPlaceholder: 'প্লেয়ার আইডি বসান',
@@ -37,6 +51,61 @@ export const PRODUCTS: ProductCategory[] = [
       { id: 'like-2', name: '3000 FF LIKE', subtitle: '15 দিন এ পাবেন', price: 450 },
       { id: 'like-3', name: '6000 FF LIKE', subtitle: '30 দিন এ পাবেন', price: 900 },
       { id: 'like-4', name: '12000 FF LIKE', subtitle: '60 দিন এ পাবেন', price: 1800 }
+    ]
+  },
+  {
+    id: 'special-friday-offer',
+    name: 'Friday Offer',
+    image: '/assets/aistudio/20261028_111452_0000_f73578f1.png',
+    badge: '২৪ ঘণ্টার স্পেশাল অফার',
+    inputLabel: 'এখানে গেমের আইডি কোড দিন',
+    inputPlaceholder: 'এখানে গেমের আইডি কোড দিন',
+    rules: STANDARD_RULES,
+    packages: [
+      { id: 'fri-1', name: '115 Diamond (Friday)', price: 75 },
+      { id: 'fri-2', name: '240 Diamond (Friday)', price: 149 },
+      { id: 'fri-3', name: 'Weekly Pass (Friday)', price: 149 },
+      { id: 'fri-4', name: '610 Diamond (Friday)', price: 380 },
+      { id: 'fri-5', name: 'Monthly Pass (Friday)', price: 749 },
+      { id: 'fri-6', name: '1240 Diamond (Friday)', price: 760 },
+      { id: 'fri-7', name: '2530 Diamond (Friday)', price: 1520 },
+      { id: 'fri-8', name: '5060 Diamond (Friday)', price: 3050 }
+    ]
+  },
+  {
+    id: 'roblox',
+    name: 'Roblox',
+    image: '/assets/aistudio/20261028_094811_0000_266f3d31.png',
+    badge: 'ইনস্ট্যান্ট Robux ডেলিভারি',
+    inputLabel: 'Roblox ইউজারনেম দিন',
+    inputPlaceholder: 'Roblox Username দিন',
+    rules: ROBLOX_RULES,
+    packages: [
+      { id: 'rob-1', name: '80 Robux', price: 110 },
+      { id: 'rob-2', name: '160 Robux', price: 220 },
+      { id: 'rob-3', name: '400 Robux', price: 490 },
+      { id: 'rob-4', name: '800 Robux', price: 950 },
+      { id: 'rob-5', name: '1000 Robux', price: 1180 },
+      { id: 'rob-6', name: '2000 Robux', price: 2350 },
+      { id: 'rob-7', name: '4500 Robux', price: 5100 }
+    ]
+  },
+  {
+    id: 'clash-of-clans',
+    name: 'Clash of Clans',
+    image: '/assets/aistudio/20261028_093830_0000_690cf23b.png',
+    badge: 'সুপারসেল প্লেয়ার ট্যাগ টপআপ',
+    inputLabel: 'প্লেয়ার ট্যাগ (Player Tag) দিন (#XXXXXX)',
+    inputPlaceholder: 'যেমন: #9V8Y2UQQP',
+    rules: COC_RULES,
+    packages: [
+      { id: 'coc-1', name: '80 Gems', price: 95 },
+      { id: 'coc-2', name: '500 Gems', price: 480 },
+      { id: 'coc-3', name: '1200 Gems', price: 960 },
+      { id: 'coc-4', name: '2500 Gems', price: 1950 },
+      { id: 'coc-5', name: '6500 Gems', price: 4850 },
+      { id: 'coc-6', name: 'Gold Pass', price: 650 },
+      { id: 'coc-7', name: 'Event Pass', price: 450 }
     ]
   },
   {

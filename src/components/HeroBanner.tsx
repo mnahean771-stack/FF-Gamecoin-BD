@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useApp } from '../context/AppContext';
 
 const BANNERS = ['/Banner 1.jpg', '/Banner 2.jpg', '/Banner 3.jpg'];
 
 export const HeroBanner: React.FC = () => {
+  const { config } = useApp();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [hasMoved, setHasMoved] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const telegramLink = config.telegramGroup || 'https://t.me/FF_Gamecoin';
 
   useEffect(() => {
     if (isDragging) return;
@@ -19,6 +24,7 @@ export const HeroBanner: React.FC = () => {
 
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
+    setHasMoved(false);
     setStartX(e.clientX);
     setCurrentTranslate(0);
   };
@@ -26,6 +32,9 @@ export const HeroBanner: React.FC = () => {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const delta = e.clientX - startX;
+    if (Math.abs(delta) > 8) {
+      setHasMoved(true);
+    }
     setCurrentTranslate(delta);
   };
 
@@ -40,6 +49,11 @@ export const HeroBanner: React.FC = () => {
     setCurrentTranslate(0);
   };
 
+  const handleBannerClick = () => {
+    if (hasMoved) return;
+    window.open(telegramLink, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div
       ref={containerRef}
@@ -47,7 +61,7 @@ export const HeroBanner: React.FC = () => {
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
-      className="relative mt-[18px] rounded-[26px] overflow-hidden border-[1.5px] border-[#1e293b] shadow-[0_4px_0_#1e293b,0_16px_36px_-12px_rgba(17,24,39,0.28)] bg-[#050d24] select-none touch-pan-y cursor-grab active:cursor-grabbing"
+      className="relative mt-[18px] rounded-[26px] overflow-hidden border-[1.5px] border-[#1e293b] shadow-[0_4px_0_#1e293b,0_16px_36px_-12px_rgba(17,24,39,0.28)] bg-[#050d24] select-none touch-pan-y cursor-pointer"
     >
       <div
         className="flex transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-transform"
@@ -57,7 +71,12 @@ export const HeroBanner: React.FC = () => {
         }}
       >
         {BANNERS.map((banner, idx) => (
-          <div key={idx} className="w-full shrink-0 aspect-2/1 min-h-[160px] relative bg-[#050d24]">
+          <div
+            key={idx}
+            onClick={handleBannerClick}
+            title="গিভওয়ে ও সকল অফার সম্পর্কে জানতে টেলিগ্রাম চ্যানেলে জয়েন করুন"
+            className="w-full shrink-0 aspect-2/1 min-h-[160px] relative bg-[#050d24] cursor-pointer"
+          >
             <img
               src={banner}
               alt={`Banner ${idx + 1}`}

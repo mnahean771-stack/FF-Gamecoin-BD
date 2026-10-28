@@ -11,7 +11,7 @@ export const ProductGrid: React.FC = () => {
         <div className="w-[5px] h-[28px] rounded-[5px] bg-linear-to-b from-blue-300 to-blue-600" />
         <h2 className="text-[21px] font-extrabold tracking-tight">
           <span className="bg-linear-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-            FREE FIRE TOPUP
+            GAME TOPUP &amp; OFFERS
           </span>
         </h2>
         <div className="flex-1 h-[1px] bg-linear-to-r from-[#e1e8f5] to-transparent" />

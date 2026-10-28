@@ -1,9 +1,10 @@
 import React from 'react';
-import { useApp } from './context/AppContext';
+import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
 import { QuickLinks } from './components/QuickLinks';
 import { ProductGrid } from './components/ProductGrid';
+import { DashboardView } from './components/DashboardView';
 import { ProductDetailView } from './components/ProductDetailView';
 import { MyOrdersView } from './components/MyOrdersView';
 import { MyCodesView } from './components/MyCodesView';
@@ -30,8 +31,8 @@ export const AppContent: React.FC = () => {
         }}
       />
 
-      {/* Global Header */}
-      <Header />
+      {/* Global Header - DashboardView has its own matching header */}
+      {view !== 'dashboard' && view !== 'my-orders' && view !== 'account' && <Header />}
 
       {/* Main View Router */}
       <main className="min-h-[calc(100vh-68px)]">
@@ -45,10 +46,11 @@ export const AppContent: React.FC = () => {
         )}
 
         {view === 'product' && <ProductDetailView />}
-        {view === 'my-orders' && <MyOrdersView />}
-        {view === 'my-codes' && <MyCodesView />}
-        {view === 'account' && <MyAccountView />}
+        {view === 'dashboard' && <DashboardView />}
+        {view === 'my-orders' && <DashboardView />}
+        {view === 'account' && <DashboardView />}
         {view === 'add-money' && <AddMoneyView />}
+        {view === 'my-codes' && <MyCodesView />}
       </main>
 
       {/* Floating Elements & Nav */}
@@ -69,5 +71,9 @@ export const AppContent: React.FC = () => {
 };
 
 export default function App() {
-  return <AppContent />;
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
 }

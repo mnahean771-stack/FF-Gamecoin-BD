@@ -2,10 +2,12 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export const FloatingSupport: React.FC = () => {
-  const { isFabOpen, toggleFab, config } = useApp();
+  const { isFabOpen, toggleFab, config, showToast, view } = useApp();
+
+  if (view === 'dashboard') return null;
 
   return (
-    <div className="fixed right-4 bottom-[90px] md:bottom-6 z-40 flex flex-col items-end gap-2.5 pointer-events-none">
+    <div className="fixed right-4 bottom-[76px] z-40 flex flex-col items-end gap-2.5 pointer-events-none">
       {/* Expanded Menu */}
       <div
         className={`flex flex-col items-end gap-2.5 transition-all duration-300 origin-bottom-right ${
@@ -43,19 +45,34 @@ export const FloatingSupport: React.FC = () => {
           </span>
         </a>
 
-        <a
-          href={config.youtubeChannel}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2.5 p-[6px_6px_6px_16px] rounded-full bg-white border border-[#e1e8f5] shadow-[0_8px_20px_rgba(20,40,90,0.15)] text-[13px] font-semibold text-[#0f172a] hover:bg-slate-50 transition-colors"
-        >
-          <span>YouTube</span>
-          <span className="w-[38px] h-[38px] rounded-full bg-[#e53935] text-white grid place-items-center text-[19px]">
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
-            </svg>
-          </span>
-        </a>
+        {config.youtubeChannel ? (
+          <a
+            href={config.youtubeChannel}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2.5 p-[6px_6px_6px_16px] rounded-full bg-white border border-[#e1e8f5] shadow-[0_8px_20px_rgba(20,40,90,0.15)] text-[13px] font-semibold text-[#0f172a] hover:bg-slate-50 transition-colors"
+          >
+            <span>YouTube</span>
+            <span className="w-[38px] h-[38px] rounded-full bg-[#e53935] text-white grid place-items-center text-[19px]">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
+              </svg>
+            </span>
+          </a>
+        ) : (
+          <button
+            type="button"
+            onClick={() => showToast('ইউটিউব চ্যানেল শীঘ্রই আসছে')}
+            className="flex items-center gap-2.5 p-[6px_6px_6px_16px] rounded-full bg-white border border-[#e1e8f5] shadow-[0_8px_20px_rgba(20,40,90,0.15)] text-[13px] font-semibold text-[#0f172a] hover:bg-slate-50 transition-colors cursor-pointer"
+          >
+            <span>YouTube</span>
+            <span className="w-[38px] h-[38px] rounded-full bg-[#e53935] text-white grid place-items-center text-[19px]">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4a2.500 2.500 0 0 0-1.800 1.800C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z" />
+              </svg>
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Main Trigger Button */}

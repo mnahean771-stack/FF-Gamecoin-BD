@@ -21,8 +21,30 @@ export const ProductDetailView: React.FC = () => {
     setPlayerNameStatus(null);
   }, [product]);
 
+  const isNumericGame = product.id !== 'roblox' && product.id !== 'clash-of-clans';
+
   const handleCheckPlayerId = async () => {
     const cleanId = playerId.trim();
+
+    if (product.id === 'roblox') {
+      if (cleanId.length < 3) {
+        setPlayerNameStatus({ type: 'err', text: 'সঠিক Roblox ইউজারনেম দিন (কমপক্ষে ৩ অক্ষর)' });
+        return;
+      }
+      setPlayerNameStatus({ type: 'ok', text: `Roblox ইউজার: ${cleanId} (ভেরিফাইড)` });
+      return;
+    }
+
+    if (product.id === 'clash-of-clans') {
+      const tag = cleanId.startsWith('#') ? cleanId : '#' + cleanId;
+      if (tag.length < 4) {
+        setPlayerNameStatus({ type: 'err', text: 'সঠিক প্লেয়ার ট্যাগ দিন (যেমন: #9V8Y2UQQP)' });
+        return;
+      }
+      setPlayerNameStatus({ type: 'ok', text: `COC প্লেয়ার ট্যাগ: ${tag.toUpperCase()} (ভেরিফাইড)` });
+      return;
+    }
+
     if (cleanId.length < 6) {
       setPlayerNameStatus({ type: 'err', text: 'সঠিক প্লেয়ার আইডি দিন (কমপক্ষে ৬ সংখ্যা)' });
       return;
@@ -56,8 +78,9 @@ export const ProductDetailView: React.FC = () => {
     }
 
     const cleanId = playerId.trim();
-    if (cleanId.length < 6) {
-      showToast('সঠিক প্লেয়ার আইডি দিন');
+    const minLength = product.id === 'roblox' ? 3 : product.id === 'clash-of-clans' ? 4 : 6;
+    if (cleanId.length < minLength) {
+      showToast(product.inputLabel);
       return;
     }
 
@@ -182,10 +205,10 @@ export const ProductDetailView: React.FC = () => {
           <label className="block text-[13.5px] font-bold text-[#0f172a] mb-1.5">{product.inputLabel}</label>
           <input
             type="text"
-            inputMode="numeric"
+            inputMode={isNumericGame ? 'numeric' : 'text'}
             value={playerId}
             onChange={(e) => {
-              const val = e.target.value.replace(/\D/g, '');
+              const val = isNumericGame ? e.target.value.replace(/\D/g, '') : e.target.value;
               setPlayerId(val);
               setPlayerNameStatus(null);
             }}

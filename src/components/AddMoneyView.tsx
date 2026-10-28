@@ -58,7 +58,7 @@ export const AddMoneyView: React.FC = () => {
           type="button"
           onClick={() => {
             if (step === 2) setStep(1);
-            else navigateTo('home');
+            else navigateTo('dashboard', undefined, 'wallet');
           }}
           aria-label="Back"
           className="w-10 h-10 rounded-[12px] bg-[#eaf1ff] text-[#2563eb] text-[20px] grid place-items-center cursor-pointer shrink-0 active:scale-95 transition-all"
